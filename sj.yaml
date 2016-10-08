@@ -1,0 +1,36 @@
+apiVersion: batch/v2alpha1
+kind: ScheduledJob
+metadata:
+  name: hello
+spec:
+  schedule: 0/2 * * * ?
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: gcr.io/jntlserv0/huoneisto_utils:0.5
+        env:
+        - name: THEMES
+          value: realestate
+        - name: LOCALE
+          value: fi_FI
+        - name: DBADMIN
+          value: admin
+        - name: ADDRS
+          value: mymongo-controller
+        - name: SITES
+          value: huoneisto.mobi
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: password
+          restartPolicy: OnFailure
+

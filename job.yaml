@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  parallelism: 100
+  template:
+    metadata:
+      name: pi
+    spec:
+      containers:
+      - name: pi
+        image:  gcr.io/jntlserv0/huoneisto_utils:0.5
+        env:
+        - name: THEMES
+          value: realestate
+        - name: LOCALE
+          value: fi_FI
+        - name: DBADMIN
+          value: admin
+        - name: ADDRS
+          value: mymongo-controller
+        - name: SITES
+          value: huoneisto.mobi               
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: password
+      restartPolicy: Never
