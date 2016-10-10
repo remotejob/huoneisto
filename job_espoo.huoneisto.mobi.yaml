@@ -21,7 +21,7 @@ spec:
         - name: ADDRS
           value: mymongo-controller
         - name: SITES
-          value: huoneisto.mobi               
+          value: espoo.huoneisto.mobi               
         - name: USERNAME
           valueFrom:
             secretKeyRef:

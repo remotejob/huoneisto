@@ -101,13 +101,6 @@ func main() {
 
 		newArticle.AddAuthor()
 		newArticle.InsertIntoDB(*dbsession)
-		// fmt.Println(newArticle.Modarticle.Author)
-		// fmt.Println(newArticle.Modarticle.Site)
-		// fmt.Println(newArticle.Modarticle.Title)
-		// fmt.Println(newArticle.Modarticle.Stitle)
-		// fmt.Println(newArticle.Modarticle.Mcontents)
-
-		// fmt.Println(newArticle.Modarticle.Contents)
 
 	} else {
 		fmt.Println("Creates stitle EXIST!! but it possible", stitle)
