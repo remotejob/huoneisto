@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: pi
 spec:
-  parallelism: 1000
+  parallelism: 500
   template:
     metadata:
       name: pi
