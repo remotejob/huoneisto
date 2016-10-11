@@ -1,5 +1,5 @@
 #! /bin/bash
 
 cd /home/support/github.com/remotejob/huoneisto_utils
-kubectl delete pods $( kubectl get pods --show-all |grep 'Completed' |awk '{print $1}') && kubectl delete jobs pi && kubectl create -f job_espoo.huoneisto.mobi.yaml && kubectl create -f job_www.huoneisto.mobi.yaml && kubectl create -f job_huoneisto.mobi.yaml
+kubectl delete pods $( kubectl get pods -a --no-headers |grep 'Completed' |awk '{print $1}') && kubectl delete jobs $(kubectl get jobs --no-headers  |awk '{print $1}') && kubectl create -f job_espoo.huoneisto.mobi.yaml && kubectl create -f job_www.huoneisto.mobi.yaml && kubectl create -f job_huoneisto.mobi.yaml
 
