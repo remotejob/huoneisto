@@ -33,5 +33,5 @@ spec:
               name: mysecret
               key: password
         - name: TICK
-          value: 60     
+          value: "60"     
  
