@@ -1,16 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: huoneisto-utils
+  name: huoneisto-utils-espoo
 spec:
   template:
     metadata:
       labels:
-        run: huoneisto-utils
+        run: huoneisto-utils-espoo
     spec:
       containers:
-      - name: huoneisto-utils
-        image:  gcr.io/jntlserv0/huoneisto_utils:1.1cron
+      - name: huoneisto-utils-espoo
+        image:  gcr.io/jntlserv0/huoneisto_utils:1.2cron
         env:
         - name: THEMES
           value: realestate
@@ -21,7 +21,7 @@ spec:
         - name: ADDRS
           value: mymongo-controller
         - name: SITES
-          value: huoneisto.mobi               
+          value: espoo.huoneisto.mobi               
         - name: USERNAME
           valueFrom:
             secretKeyRef:
@@ -33,5 +33,5 @@ spec:
               name: mysecret
               key: password
         - name: TICK
-          value: "60"     
+          value: "120"     
  

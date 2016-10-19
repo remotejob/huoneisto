@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -70,6 +71,11 @@ func Run() {
 	log.Println(password)
 	log.Println(sites[0])
 	log.Println("tick", tick)
+
+	pauseint := rand.Perm(tick)[0]
+	log.Println("sleeppause", pauseint)
+
+	time.Sleep(time.Duration(pauseint) * time.Second)
 
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:     addrs,
