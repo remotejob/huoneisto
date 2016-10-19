@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: huoneisto-utils
-        image:  gcr.io/jntlserv0/huoneisto_utils:0.6
+        image:  gcr.io/jntlserv0/huoneisto_utils:1.0cron
         env:
         - name: THEMES
           value: realestate
