@@ -32,4 +32,6 @@ spec:
             secretKeyRef:
               name: mysecret
               key: password
+        - name: TICK
+          value: 60     
  
