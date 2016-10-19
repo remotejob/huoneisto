@@ -37,6 +37,25 @@ func init() {
 
 func main() {
 
+	go func() {
+		c := time.Tick(30 * time.Second)
+		for range c {
+			// Note this purposfully runs the function
+			// in the same goroutine so we make sure there is
+			// only ever one. If it might take a long time and
+			// it's safe to have several running just add "go" here.
+			go Run()
+		}
+	}()
+
+	// Other processing or the rest of your program here.
+	//time.Sleep(5 * time.Second)
+
+	// Or to block forever:
+	select {}
+}
+
+func Run() {
 	log.Println(themes)
 	log.Println(locale)
 	log.Println(addrs[0])
