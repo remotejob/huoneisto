@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/remotejob/huoneisto_utils/bookgen"
@@ -23,6 +24,8 @@ var password string
 var mechanism string
 var sites []string
 
+var tick int
+
 func init() {
 
 	themes = os.Getenv("THEMES")
@@ -33,12 +36,14 @@ func init() {
 	password = os.Getenv("PASSWORD")
 	mechanism = os.Getenv("MECHANISM")
 	sites = []string{os.Getenv("SITES")}
+
+	tick, _ = strconv.Atoi(os.Getenv("TICK"))
 }
 
 func main() {
 
 	go func() {
-		c := time.Tick(30 * time.Second)
+		c := time.Tick(time.Duration(tick) * time.Second)
 		for range c {
 			// Note this purposfully runs the function
 			// in the same goroutine so we make sure there is
@@ -55,6 +60,7 @@ func main() {
 	select {}
 }
 
+//Run runner for utils
 func Run() {
 	log.Println(themes)
 	log.Println(locale)
@@ -63,6 +69,7 @@ func Run() {
 	log.Println(username)
 	log.Println(password)
 	log.Println(sites[0])
+	log.Println("tick", tick)
 
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:     addrs,
