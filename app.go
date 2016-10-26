@@ -77,6 +77,8 @@ func Run() {
 
 	time.Sleep(time.Duration(pauseint) * time.Second)
 
+	log.Println("end pause startdb", pauseint)
+
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:     addrs,
 		Timeout:   60 * time.Second,
@@ -137,5 +139,8 @@ func Run() {
 	} else {
 		fmt.Println("Creates stitle EXIST!! but it possible", stitle)
 	}
+
+	dbsession.Close()
+	log.Println("END close DB")
 
 }

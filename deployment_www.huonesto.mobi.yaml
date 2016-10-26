@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: huoneisto-utils-www
-        image:  gcr.io/jntlserv0/huoneisto_utils:1.2cron
+        image:  remotejob/huoneisto_utils:1.2cron
         env:
         - name: THEMES
           value: realestate
@@ -19,7 +19,7 @@ spec:
         - name: DBADMIN
           value: admin
         - name: ADDRS
-          value: mymongo-controller
+          value: mydocker-service
         - name: SITES
           value: www.huoneisto.mobi               
         - name: USERNAME
