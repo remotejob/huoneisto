@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: huoneisto-utils-espoo
-  namespace: huoneisto
 spec:
   template:
     metadata:
