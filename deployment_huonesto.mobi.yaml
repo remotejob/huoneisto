@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: huoneisto-utils
-        image: remotejob/huoneisto_utils:1.2cron
+        image: remotejob/huoneisto_utils:1.3cron
         env:
         - name: THEMES
           value: realestate

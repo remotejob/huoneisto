@@ -50,7 +50,7 @@ func main() {
 			// in the same goroutine so we make sure there is
 			// only ever one. If it might take a long time and
 			// it's safe to have several running just add "go" here.
-			go Run()
+			Run()
 		}
 	}()
 
@@ -63,14 +63,14 @@ func main() {
 
 //Run runner for utils
 func Run() {
-	log.Println(themes)
-	log.Println(locale)
-	log.Println(addrs[0])
-	log.Println("dbadmin", dbadmin)
-	log.Println(username)
-	log.Println(password)
-	log.Println(sites[0])
-	log.Println("tick", tick)
+	// log.Println(themes)
+	// log.Println(locale)
+	// log.Println(addrs[0])
+	// log.Println("dbadmin", dbadmin)
+	// log.Println(username)
+	// log.Println(password)
+	// log.Println(sites[0])
+	// log.Println("tick", tick)
 
 	pauseint := rand.Perm(tick)[0]
 	log.Println("sleeppause", pauseint)

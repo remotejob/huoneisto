@@ -1,7 +1,7 @@
 all: push
 
 # 0.0 shouldn't clobber any released builds
-TAG =1.2cron
+TAG =1.3cron
 PREFIX = remotejob/huoneisto_utils
 
 binary: app.go
@@ -14,7 +14,7 @@ push: container
 	docker push $(PREFIX):$(TAG)
 
 set: 
-	 kubectl set image deployment/ huoneisto_utils huoneisto_utils=$(PREFIX):$(TAG)
+	 ssh root@159.203.107.223 kubectl set image deployment/huoneisto_utils huoneisto_utils=$(PREFIX):$(TAG)
 
 clean:
 	docker rmi -f $(PREFIX):$(TAG) || true
