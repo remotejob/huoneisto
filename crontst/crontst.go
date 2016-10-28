@@ -20,9 +20,9 @@ func main() {
 
 	// Do jobs without params
 	// gocron.Every(1).Second().Do(task)
-	// gocron.Every(2).Seconds().Do(task)
+	gocron.Every(5).Seconds().Do(task)
 	// gocron.Every(1).Minute().Do(task)
-	gocron.Every(1).Minutes().Do(task)
+	// gocron.Every(1).Minutes().Do(task)
 	// gocron.Every(1).Hour().Do(task)
 	// gocron.Every(2).Hours().Do(task)
 	// gocron.Every(1).Day().Do(task)
@@ -37,8 +37,8 @@ func main() {
 	// gocron.Every(1).Monday().At("18:30").Do(task)
 
 	// remove, clear and next_run
-	// _, time := gocron.NextRun()
-	// fmt.Println(time)
+	_, time := gocron.NextRun()
+	fmt.Println(time)
 
 	// gocron.Remove(task)
 	// gocron.Clear()

@@ -14,17 +14,6 @@ import (
 //Create create file
 func Create(session mgo.Session, themes string, locale string, filename string) {
 
-	// if _, err := os.Stat(filename); !os.IsNotExist(err) {
-
-	// 	err := os.Remove(filename)
-	// 	if err != nil {
-
-	// 		log.Println(err.Error())
-	// 		return
-	// 	}
-
-	// }
-
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 

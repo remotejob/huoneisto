@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/jasonlvhit/gocron"
@@ -26,7 +24,7 @@ var password string
 var mechanism string
 var sites []string
 
-var tick int
+// var tick int
 
 func init() {
 
@@ -39,7 +37,7 @@ func init() {
 	mechanism = os.Getenv("MECHANISM")
 	sites = []string{os.Getenv("SITES")}
 
-	tick, _ = strconv.Atoi(os.Getenv("TICK"))
+	// ktick, _ = strconv.Atoi(os.Getenv("TICK"))
 }
 
 func main() {
@@ -77,12 +75,12 @@ func Run() {
 	// log.Println(sites[0])
 	// log.Println("tick", tick)
 
-	pauseint := rand.Perm(tick)[0]
-	log.Println("sleeppause", pauseint)
+	// pauseint := rand.Perm(tick)[0]
+	// log.Println("sleeppause", pauseint)
 
-	time.Sleep(time.Duration(pauseint) * time.Second)
+	// time.Sleep(time.Duration(pauseint) * time.Second)
 
-	log.Println("end pause startdb", pauseint)
+	// log.Println("end pause startdb", pauseint)
 
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:     addrs,
