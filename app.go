@@ -53,8 +53,8 @@ func init() {
 
 func main() {
 
-	// gocron.Every(1).Minutes().Do(Run)
-	gocron.Every(30).Second().Do(Run)
+	gocron.Every(1).Minutes().Do(Run)
+	// gocron.Every(30).Second().Do(Run)
 
 	<-gocron.Start()
 
