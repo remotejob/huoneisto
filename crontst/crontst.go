@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
 
-	"github.com/jasonlvhit/gocron"
+	"github.com/robfig/cron"
 )
 
 func task() {
@@ -15,12 +17,19 @@ func taskWithParams(a int, b string) {
 }
 
 func main() {
+	c := cron.New()
+	c.AddFunc("0 * * * * *", func() { fmt.Println("Every hour on the half hour") })
+
+	go c.Start()
+	sig := make(chan os.Signal)
+	signal.Notify(sig, os.Interrupt, os.Kill)
+	<-sig
 	// Do jobs with params
 	// gocron.Every(1).Second().Do(taskWithParams, 1, "hello")
 
 	// Do jobs without params
 	// gocron.Every(1).Second().Do(task)
-	gocron.Every(5).Seconds().Do(task)
+	// gocron.Every(5).Seconds().Do(task)
 	// gocron.Every(1).Minute().Do(task)
 	// gocron.Every(1).Minutes().Do(task)
 	// gocron.Every(1).Hour().Do(task)
@@ -37,14 +46,14 @@ func main() {
 	// gocron.Every(1).Monday().At("18:30").Do(task)
 
 	// remove, clear and next_run
-	_, time := gocron.NextRun()
-	fmt.Println(time)
+	// _, time := gocron.NextRun()
+	// fmt.Println(time)
 
 	// gocron.Remove(task)
 	// gocron.Clear()
 
 	// function Start start all the pending jobs
-	<-gocron.Start()
+	// <-gocron.Start()
 
 	// also , you can create a your new scheduler,
 	// to run two scheduler concurrently

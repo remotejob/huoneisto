@@ -6,12 +6,13 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/signal"
 	"time"
 
-	"github.com/jasonlvhit/gocron"
 	"github.com/remotejob/huoneisto_utils/bookgen"
 	"github.com/remotejob/huoneisto_utils/entryHandler"
 	"github.com/remotejob/kaukotyoeu/dbhandler"
+	"github.com/robfig/cron"
 	mgo "gopkg.in/mgo.v2"
 )
 
@@ -53,10 +54,18 @@ func init() {
 
 func main() {
 
-	gocron.Every(1).Minutes().Do(Run)
-	// gocron.Every(30).Second().Do(Run)
+	// gocron.Every(1).Minutes().Do(Run)
+	// // gocron.Every(30).Second().Do(Run)
 
-	<-gocron.Start()
+	// <-gocron.Start()
+
+	c := cron.New()
+	c.AddFunc("0 * * * * *", Run)
+
+	go c.Start()
+	sig := make(chan os.Signal)
+	signal.Notify(sig, os.Interrupt, os.Kill)
+	<-sig
 
 	// go func() {
 	// 	c := time.Tick(time.Duration(tick) * time.Second)
