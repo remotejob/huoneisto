@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/jasonlvhit/gocron"
 	"github.com/remotejob/huoneisto_utils/bookgen"
 	"github.com/remotejob/huoneisto_utils/entryHandler"
 	"github.com/remotejob/kaukotyoeu/dbhandler"
@@ -43,22 +44,24 @@ func init() {
 
 func main() {
 
-	go func() {
-		c := time.Tick(time.Duration(tick) * time.Second)
-		for range c {
-			// Note this purposfully runs the function
-			// in the same goroutine so we make sure there is
-			// only ever one. If it might take a long time and
-			// it's safe to have several running just add "go" here.
-			Run()
-		}
-	}()
+	gocron.Every(1).Minutes().Do(Run)
+
+	// go func() {
+	// 	c := time.Tick(time.Duration(tick) * time.Second)
+	// 	for range c {
+	// 		// Note this purposfully runs the function
+	// 		// in the same goroutine so we make sure there is
+	// 		// only ever one. If it might take a long time and
+	// 		// it's safe to have several running just add "go" here.
+	// 		Run()
+	// 	}
+	// }()
 
 	// Other processing or the rest of your program here.
 	//time.Sleep(5 * time.Second)
 
 	// Or to block forever:
-	select {}
+	// select {}
 }
 
 //Run runner for utils
