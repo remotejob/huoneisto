@@ -46,6 +46,8 @@ func main() {
 
 	gocron.Every(1).Minutes().Do(Run)
 
+	<-gocron.Start()
+
 	// go func() {
 	// 	c := time.Tick(time.Duration(tick) * time.Second)
 	// 	for range c {
