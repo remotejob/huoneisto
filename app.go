@@ -23,6 +23,7 @@ var username string
 var password string
 var mechanism string
 var sites []string
+var mongoDBDialInfo mgo.DialInfo
 
 // var tick int
 
@@ -38,11 +39,22 @@ func init() {
 	sites = []string{os.Getenv("SITES")}
 
 	// ktick, _ = strconv.Atoi(os.Getenv("TICK"))
+
+	mongoDBDialInfo = mgo.DialInfo{
+		Addrs:     addrs,
+		Timeout:   60 * time.Second,
+		Database:  dbadmin,
+		Username:  username,
+		Password:  password,
+		Mechanism: mechanism,
+	}
+
 }
 
 func main() {
 
-	gocron.Every(1).Minutes().Do(Run)
+	// gocron.Every(1).Minutes().Do(Run)
+	gocron.Every(30).Second().Do(Run)
 
 	<-gocron.Start()
 
@@ -82,16 +94,7 @@ func Run() {
 
 	// log.Println("end pause startdb", pauseint)
 
-	mongoDBDialInfo := &mgo.DialInfo{
-		Addrs:     addrs,
-		Timeout:   60 * time.Second,
-		Database:  dbadmin,
-		Username:  username,
-		Password:  password,
-		Mechanism: mechanism,
-	}
-
-	dbsession, err := mgo.DialWithInfo(mongoDBDialInfo)
+	dbsession, err := mgo.DialWithInfo(&mongoDBDialInfo)
 
 	if err != nil {
 		panic(err)
@@ -144,6 +147,7 @@ func Run() {
 	}
 
 	dbsession.Close()
+
 	log.Println("END close DB")
 
 }
