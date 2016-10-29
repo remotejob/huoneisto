@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -103,13 +104,14 @@ func Run(dbsession *mgo.Session) {
 	// log.Println(password)
 	// log.Println(sites[0])
 	// log.Println("tick", tick)
+	var markfileSize int64
 
-	// pauseint := rand.Perm(tick)[0]
-	// log.Println("sleeppause", pauseint)
+	pauseint := rand.Perm(tick)[0]
+	log.Println("sleeppause", pauseint)
 
-	// time.Sleep(time.Duration(pauseint) * time.Second)
+	time.Sleep(time.Duration(pauseint) * time.Second)
 
-	// log.Println("end pause startdb", pauseint)
+	log.Println("end pause startdb", pauseint)
 
 	bookgen.Create(*dbsession, themes, locale, "/blog.txt")
 
@@ -123,8 +125,10 @@ func Run(dbsession *mgo.Session) {
 		fi, err := f.Stat()
 		if err != nil {
 			log.Fatal(err)
+		} else {
+			log.Println("/blog.txt file size", fi.Size())
+			markfileSize = fi.Size()
 		}
-		log.Println("/blog.txt file size", fi.Size())
 	}
 
 	_, err = io.Copy(buf, f)
@@ -164,9 +168,13 @@ func Run(dbsession *mgo.Session) {
 	}
 
 	buf.Reset()
-	err = os.Remove("/blog.txt")
-	if err != nil {
-		log.Fatal(err)
+
+	if markfileSize > int64(2000000) {
+		log.Println("Time delete markfile")
+		err = os.Remove("/blog.txt")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	log.Println("END close DB")
