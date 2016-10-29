@@ -6,13 +6,12 @@ import (
 	"io"
 	"log"
 	"os"
-	"os/signal"
+	"strconv"
 	"time"
 
 	"github.com/remotejob/huoneisto_utils/bookgen"
 	"github.com/remotejob/huoneisto_utils/entryHandler"
 	"github.com/remotejob/kaukotyoeu/dbhandler"
-	"github.com/robfig/cron"
 	mgo "gopkg.in/mgo.v2"
 )
 
@@ -25,9 +24,9 @@ var password string
 var mechanism string
 var sites []string
 var mongoDBDialInfo mgo.DialInfo
-var dbsession mgo.Session
+var dbsession *mgo.Session
 
-// var tick int
+var tick int
 
 func init() {
 
@@ -40,7 +39,7 @@ func init() {
 	mechanism = os.Getenv("MECHANISM")
 	sites = []string{os.Getenv("SITES")}
 
-	// ktick, _ = strconv.Atoi(os.Getenv("TICK"))
+	tick, _ = strconv.Atoi(os.Getenv("TICK"))
 
 	mongoDBDialInfo = mgo.DialInfo{
 		Addrs:     addrs,
@@ -68,34 +67,34 @@ func main() {
 	}
 	defer dbsession.Close()
 
-	c := cron.New()
-	c.AddFunc("0 * * * * *", Run)
+	// c := cron.New()
+	// c.AddFunc("0 * * * * *", Run)
 
-	go c.Start()
-	sig := make(chan os.Signal)
-	signal.Notify(sig, os.Interrupt, os.Kill)
-	<-sig
+	// go c.Start()
+	// sig := make(chan os.Signal)
+	// signal.Notify(sig, os.Interrupt, os.Kill)
+	// <-sig
 
-	// go func() {
-	// 	c := time.Tick(time.Duration(tick) * time.Second)
-	// 	for range c {
-	// 		// Note this purposfully runs the function
-	// 		// in the same goroutine so we make sure there is
-	// 		// only ever one. If it might take a long time and
-	// 		// it's safe to have several running just add "go" here.
-	// 		Run()
-	// 	}
-	// }()
+	go func() {
+		c := time.Tick(time.Duration(tick) * time.Second)
+		for range c {
+			// Note this purposfully runs the function
+			// in the same goroutine so we make sure there is
+			// only ever one. If it might take a long time and
+			// it's safe to have several running just add "go" here.
+			Run(dbsession)
+		}
+	}()
 
 	// Other processing or the rest of your program here.
 	//time.Sleep(5 * time.Second)
 
 	// Or to block forever:
-	// select {}
+	select {}
 }
 
 //Run runner for utils
-func Run() {
+func Run(dbsession *mgo.Session) {
 	// log.Println(themes)
 	// log.Println(locale)
 	// log.Println(addrs[0])
@@ -112,7 +111,7 @@ func Run() {
 
 	// log.Println("end pause startdb", pauseint)
 
-	bookgen.Create(dbsession, themes, locale, "/blog.txt")
+	bookgen.Create(*dbsession, themes, locale, "/blog.txt")
 
 	buf := bytes.NewBuffer(nil)
 
@@ -134,7 +133,7 @@ func Run() {
 		log.Println(err.Error())
 	}
 
-	allsitemaplinks := dbhandler.GetAllSitemaplinks(dbsession, sites[0])
+	allsitemaplinks := dbhandler.GetAllSitemaplinks(*dbsession, sites[0])
 
 	uniqLinks := make(map[string]struct{})
 
@@ -152,7 +151,7 @@ func Run() {
 		uniqLinks[stitle] = struct{}{}
 
 		newArticle.AddAuthor()
-		newArticle.InsertIntoDB(dbsession)
+		newArticle.InsertIntoDB(*dbsession)
 
 	} else {
 		fmt.Println("Creates stitle EXIST!! but it possible", stitle)
