@@ -119,6 +119,12 @@ func Run(dbsession *mgo.Session) {
 	if err != nil {
 
 		log.Println(err.Error())
+	} else {
+		fi, err := f.Stat()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("/blog.txt file size", fi.Size())
 	}
 
 	_, err = io.Copy(buf, f)
