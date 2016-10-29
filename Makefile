@@ -1,7 +1,7 @@
 all: push
 
 # 0.0 shouldn't clobber any released builds
-TAG =1.11cron
+TAG =1.12cron
 PREFIX = remotejob/huoneisto_utils
 
 binary: app.go

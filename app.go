@@ -133,6 +133,8 @@ func Run(dbsession *mgo.Session) {
 		log.Println(err.Error())
 	}
 
+	buf.Reset()
+
 	allsitemaplinks := dbhandler.GetAllSitemaplinks(*dbsession, sites[0])
 
 	uniqLinks := make(map[string]struct{})
