@@ -25,6 +25,7 @@ var password string
 var mechanism string
 var sites []string
 var mongoDBDialInfo mgo.DialInfo
+var dbsession mgo.Session
 
 // var tick int
 
@@ -58,6 +59,14 @@ func main() {
 	// // gocron.Every(30).Second().Do(Run)
 
 	// <-gocron.Start()
+
+	dbsession, err := mgo.DialWithInfo(&mongoDBDialInfo)
+
+	if err != nil {
+
+		log.Println(err.Error())
+	}
+	defer dbsession.Close()
 
 	c := cron.New()
 	c.AddFunc("0 * * * * *", Run)
@@ -103,13 +112,7 @@ func Run() {
 
 	// log.Println("end pause startdb", pauseint)
 
-	dbsession, err := mgo.DialWithInfo(&mongoDBDialInfo)
-
-	if err != nil {
-		panic(err)
-	}
-	defer dbsession.Close()
-	bookgen.Create(*dbsession, themes, locale, "/blog.txt")
+	bookgen.Create(dbsession, themes, locale, "/blog.txt")
 
 	buf := bytes.NewBuffer(nil)
 
@@ -131,7 +134,7 @@ func Run() {
 		log.Println(err.Error())
 	}
 
-	allsitemaplinks := dbhandler.GetAllSitemaplinks(*dbsession, sites[0])
+	allsitemaplinks := dbhandler.GetAllSitemaplinks(dbsession, sites[0])
 
 	uniqLinks := make(map[string]struct{})
 
@@ -149,13 +152,13 @@ func Run() {
 		uniqLinks[stitle] = struct{}{}
 
 		newArticle.AddAuthor()
-		newArticle.InsertIntoDB(*dbsession)
+		newArticle.InsertIntoDB(dbsession)
 
 	} else {
 		fmt.Println("Creates stitle EXIST!! but it possible", stitle)
 	}
 
-	dbsession.Close()
+	// dbsession.Close()
 
 	log.Println("END close DB")
 

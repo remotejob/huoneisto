@@ -2,10 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-
-	"github.com/robfig/cron"
+	"time"
 )
 
 func task() {
@@ -16,14 +13,48 @@ func taskWithParams(a int, b string) {
 	fmt.Println(a, b)
 }
 
-func main() {
-	c := cron.New()
-	c.AddFunc("0 * * * * *", func() { fmt.Println("Every hour on the half hour") })
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for j := range jobs {
+		fmt.Println("worker", id, "processing job", j)
+		time.Sleep(time.Second)
+		results <- j * 2
+	}
+}
 
-	go c.Start()
-	sig := make(chan os.Signal)
-	signal.Notify(sig, os.Interrupt, os.Kill)
-	<-sig
+func main() {
+	jobs := make(chan int, 100)
+	results := make(chan int, 100)
+
+	for w := 1; w <= 3; w++ {
+		go worker(w, jobs, results)
+	}
+
+	var j int
+	for {
+		j++
+		jobs <- j
+	}
+	close(jobs)
+
+	for {
+		<-results
+	}
+
+	// for j := 1; j <= 90; j++ {
+	// 	jobs <- j
+	// }
+	// close(jobs)
+
+	// for a := 1; a <= 90; a++ {
+	// 	<-results
+	// }
+	// c := cron.New()
+	// c.AddFunc("0 * * * * *", func() { fmt.Println("Every hour on the half hour") })
+
+	// go c.Start()
+	// sig := make(chan os.Signal)
+	// signal.Notify(sig, os.Interrupt, os.Kill)
+	// <-sig
 	// Do jobs with params
 	// gocron.Every(1).Second().Do(taskWithParams, 1, "hello")
 
