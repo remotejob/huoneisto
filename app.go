@@ -163,8 +163,11 @@ func Run(dbsession *mgo.Session) {
 		fmt.Println("Creates stitle EXIST!! but it possible", stitle)
 	}
 
-	// dbsession.Close()
 	buf.Reset()
+	err = os.Remove("/blog.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	log.Println("END close DB")
 
