@@ -20,7 +20,7 @@ spec:
         - name: DBADMIN
           value: admin
         - name: ADDRS
-          value: mydocker-service
+          value: digimongo-service
         - name: SITES
           value: espoo.huoneisto.mobi               
         - name: USERNAME
