@@ -14,7 +14,7 @@ import (
 //Create create file
 func Create(session mgo.Session, themes string, locale string, filename string) {
 
-	log.Println("Start Create file", filename)
+	log.Println("Start Create file", filename, themes, locale)
 
 	articles := dbhandler.GetAllUseful(session, themes, locale)
 

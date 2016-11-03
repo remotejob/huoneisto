@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -132,12 +131,12 @@ func Run(dbsession *mgo.Session) {
 
 	for _, site := range sites {
 
-		pauseint := rand.Perm(tick)[0]
-		log.Println("sleeppause", pauseint)
+		// pauseint := rand.Perm(tick)[0]
+		// log.Println("sleeppause", pauseint)
 
-		time.Sleep(time.Duration(pauseint) * time.Second)
+		// time.Sleep(time.Duration(pauseint) * time.Second)
 
-		log.Println("end pause startdb", pauseint)
+		// log.Println("end pause startdb", pauseint)
 
 		mfile := "/" + site[0] + "_" + site[1] + ".txt"
 		log.Println(mfile)
@@ -209,7 +208,7 @@ func Run(dbsession *mgo.Session) {
 			log.Println("END close DB")
 		} else {
 
-			log.Fatalln("VERY SMALL FILE ???")
+			log.Println("VERY SMALL FILE ???")
 
 		}
 
