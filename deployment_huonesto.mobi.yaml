@@ -13,16 +13,10 @@ spec:
       - name: huoneisto-utils
         image: remotejob/huoneisto_utils:1.16cron
         env:
-        - name: THEMES
-          value: realestate
-        - name: LOCALE
-          value: fi_FI
         - name: DBADMIN
           value: admin
         - name: ADDRS
-          value: digimongo-service
-        - name: SITES
-          value: huoneisto.mobi               
+          value: digimongo-service              
         - name: USERNAME
           valueFrom:
             secretKeyRef:

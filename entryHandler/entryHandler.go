@@ -42,7 +42,7 @@ func (article *Entryarticle) AddAuthor() {
 
 }
 
-func (article *Entryarticle) AddTitleStitleMcontents(bfile []byte, sites []string, uniqlinks map[string]struct{}) string {
+func (article *Entryarticle) AddTitleStitleMcontents(bfile []byte, site string, uniqlinks map[string]struct{}) string {
 
 	// rand.Seed(time.Now().UTC().UnixNano())
 	// siteid := gen.Random(0, len(sites))
@@ -56,7 +56,7 @@ func (article *Entryarticle) AddTitleStitleMcontents(bfile []byte, sites []strin
 	article.Modarticle.Stitle = stitle
 	article.Modarticle.Contents = contents
 	article.Modarticle.Mcontents = mcontents
-	article.Modarticle.Site = sites[0]
+	article.Modarticle.Site = site
 
 	return stitle
 

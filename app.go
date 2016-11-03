@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/csv"
 	"fmt"
 	"io"
 	"log"
@@ -23,24 +24,47 @@ var dbadmin string
 var username string
 var password string
 var mechanism string
-var sites []string
+
+// var sites []string
 var mongoDBDialInfo mgo.DialInfo
 var dbsession *mgo.Session
 
 var tick int
+var sites [][]string
 
 func init() {
 
-	themes = os.Getenv("THEMES")
-	locale = os.Getenv("LOCALE")
+	// themes = os.Getenv("THEMES")
+	// locale = os.Getenv("LOCALE")
 	addrs = []string{os.Getenv("ADDRS")}
 	dbadmin = os.Getenv("DBADMIN")
 	username = os.Getenv("USERNAME")
 	password = os.Getenv("PASSWORD")
 	mechanism = os.Getenv("MECHANISM")
-	sites = []string{os.Getenv("SITES")}
+	// sites = []string{os.Getenv("SITES")}
 
 	tick, _ = strconv.Atoi(os.Getenv("TICK"))
+
+	domains := "sites.csv"
+
+	csvfile, err := os.Open(domains)
+	if err != nil {
+		fmt.Println(err)
+	}
+	reader := csv.NewReader(csvfile)
+	reader.LazyQuotes = true
+
+	records, err := reader.ReadAll()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	sites = records
+	for _, site := range sites {
+
+		log.Println(site[0], site[1], site[2])
+
+	}
 
 	mongoDBDialInfo = mgo.DialInfo{
 		Addrs:     addrs,
@@ -106,77 +130,82 @@ func Run(dbsession *mgo.Session) {
 	// log.Println("tick", tick)
 	var markfileSize int64
 
-	pauseint := rand.Perm(tick)[0]
-	log.Println("sleeppause", pauseint)
+	for _, site := range sites {
 
-	time.Sleep(time.Duration(pauseint) * time.Second)
+		pauseint := rand.Perm(tick)[0]
+		log.Println("sleeppause", pauseint)
 
-	log.Println("end pause startdb", pauseint)
+		time.Sleep(time.Duration(pauseint) * time.Second)
 
-	bookgen.Create(*dbsession, themes, locale, "/blog.txt")
+		log.Println("end pause startdb", pauseint)
 
-	buf := bytes.NewBuffer(nil)
+		mfile := "/" + site[0] + "_" + site[1] + ".txt"
+		bookgen.Create(*dbsession, site[0], site[1], mfile)
 
-	f, err := os.Open("/blog.txt")
-	if err != nil {
+		buf := bytes.NewBuffer(nil)
 
-		log.Println(err.Error())
-	} else {
-		fi, err := f.Stat()
+		f, err := os.Open(mfile)
 		if err != nil {
-			log.Fatal(err)
+
+			log.Println(err.Error())
 		} else {
-			log.Println("/blog.txt file size", fi.Size())
-			markfileSize = fi.Size()
+			fi, err := f.Stat()
+			if err != nil {
+				log.Fatal(err)
+			} else {
+				log.Println("/mfile  size", fi.Size())
+				markfileSize = fi.Size()
+			}
 		}
-	}
 
-	_, err = io.Copy(buf, f)
-	if err != nil {
-
-		log.Println(err.Error())
-	}
-
-	err = f.Close()
-	if err != nil {
-
-		log.Println(err.Error())
-	}
-
-	allsitemaplinks := dbhandler.GetAllSitemaplinks(*dbsession, sites[0])
-
-	uniqLinks := make(map[string]struct{})
-
-	for _, sitemaplink := range allsitemaplinks {
-		uniqLinks[sitemaplink.Stitle] = struct{}{}
-
-	}
-
-	newArticle := entryHandler.NewEntryarticle()
-
-	stitle := newArticle.AddTitleStitleMcontents(buf.Bytes(), sites, uniqLinks)
-
-	if _, ok := uniqLinks[stitle]; !ok {
-
-		uniqLinks[stitle] = struct{}{}
-
-		newArticle.AddAuthor()
-		newArticle.InsertIntoDB(*dbsession)
-
-	} else {
-		fmt.Println("Creates stitle EXIST!! but it possible", stitle)
-	}
-
-	buf.Reset()
-
-	if markfileSize > int64(2000000) {
-		log.Println("Time delete markfile")
-		err = os.Remove("/blog.txt")
+		_, err = io.Copy(buf, f)
 		if err != nil {
-			log.Fatal(err)
-		}
-	}
 
-	log.Println("END close DB")
+			log.Println(err.Error())
+		}
+
+		err = f.Close()
+		if err != nil {
+
+			log.Println(err.Error())
+		}
+
+		allsitemaplinks := dbhandler.GetAllSitemaplinks(*dbsession, site[2])
+
+		uniqLinks := make(map[string]struct{})
+
+		for _, sitemaplink := range allsitemaplinks {
+			uniqLinks[sitemaplink.Stitle] = struct{}{}
+
+		}
+
+		newArticle := entryHandler.NewEntryarticle()
+
+		stitle := newArticle.AddTitleStitleMcontents(buf.Bytes(), site[2], uniqLinks)
+
+		if _, ok := uniqLinks[stitle]; !ok {
+
+			uniqLinks[stitle] = struct{}{}
+
+			newArticle.AddAuthor()
+			newArticle.InsertIntoDB(*dbsession)
+
+		} else {
+			fmt.Println("Creates stitle EXIST!! but it possible", stitle)
+		}
+
+		buf.Reset()
+
+		if markfileSize > int64(2000000) {
+			log.Println("Time delete markfile")
+			err = os.Remove("mfile")
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		log.Println("END close DB")
+
+	}
 
 }
