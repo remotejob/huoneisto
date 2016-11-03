@@ -14,14 +14,6 @@ import (
 //Create create file
 func Create(session mgo.Session, themes string, locale string, filename string) {
 
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-
-		log.Println(err.Error())
-	}
-
-	// defer f.Close()
-
 	articles := dbhandler.GetAllUseful(session, themes, locale)
 
 	var numberstoshuffle []int
@@ -34,6 +26,14 @@ func Create(session mgo.Session, themes string, locale string, filename string) 
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	shuffle.Ints(numberstoshuffle)
+
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+
+		log.Println(err.Error())
+	}
+
+	defer f.Close()
 
 	for _, i := range numberstoshuffle {
 
