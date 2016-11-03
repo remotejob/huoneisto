@@ -138,7 +138,8 @@ func Run(dbsession *mgo.Session) {
 
 		// log.Println("end pause startdb", pauseint)
 
-		mfile := "/" + site[0] + "_" + site[1] + ".txt"
+		// mfile := "/" + site[0] + "_" + site[1] + ".txt"
+		mfile := "/blog.txt"
 		log.Println(mfile)
 		bookgen.Create(*dbsession, site[0], site[1], mfile)
 
