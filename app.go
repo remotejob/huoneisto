@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -16,8 +17,8 @@ import (
 	mgo "gopkg.in/mgo.v2"
 )
 
-var themes string
-var locale string
+// var themes string
+// var locale string
 var addrs []string
 var dbadmin string
 var username string
@@ -99,22 +100,28 @@ func main() {
 	// signal.Notify(sig, os.Interrupt, os.Kill)
 	// <-sig
 
-	go func() {
-		c := time.Tick(time.Duration(tick) * time.Second)
-		for range c {
-			// Note this purposfully runs the function
-			// in the same goroutine so we make sure there is
-			// only ever one. If it might take a long time and
-			// it's safe to have several running just add "go" here.
-			Run(dbsession)
-		}
-	}()
+	for {
+		pauseint := rand.Perm(tick)[0]
+		log.Println("sleeppause", pauseint)
 
-	// Other processing or the rest of your program here.
-	//time.Sleep(5 * time.Second)
+		time.Sleep(time.Duration(pauseint+tick) * time.Second)
 
-	// Or to block forever:
-	select {}
+		log.Println("end pause startdb", pauseint+tick)
+		Run(dbsession)
+	}
+
+	// go func() {
+	// 	c := time.Tick(time.Duration(tick) * time.Second)
+	// 	for range c {
+	// 		// Note this purposfully runs the function
+	// 		// in the same goroutine so we make sure there is
+	// 		// only ever one. If it might take a long time and
+	// 		// it's safe to have several running just add "go" here.
+	// 		Run(dbsession)
+	// 	}
+	// }()
+
+	// select {}
 }
 
 //Run runner for utils
