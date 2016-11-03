@@ -17,7 +17,7 @@ func Create(session mgo.Session, themes string, locale string, filename string) 
 	log.Println("Start Create file", filename, themes, locale)
 
 	// articles := dbhandler.GetAllUseful(session, strings.TrimSpace(themes), strings.TrimSpace(locale))
-	articles := dbhandler.GetAllUseful(session, "fi_FI", "realestate")
+	articles := dbhandler.GetAllUseful(session, "realestate", "fi_FI")
 
 	log.Println("GET keywords", len(articles))
 
