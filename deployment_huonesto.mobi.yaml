@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: huoneisto-utils
-        image: remotejob/huoneisto_utils:1.20cron
+        image: remotejob/huoneisto_utils:1.21cron
         env:
         - name: DBADMIN
           value: admin
