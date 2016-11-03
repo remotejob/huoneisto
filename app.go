@@ -138,8 +138,8 @@ func Run(dbsession *mgo.Session) {
 
 		// log.Println("end pause startdb", pauseint)
 
-		// mfile := "/" + site[0] + "_" + site[1] + ".txt"
-		mfile := "/blog.txt"
+		mfile := "/" + site[0] + "_" + site[1] + ".txt"
+		// mfile := "/blog.txt"
 		log.Println(mfile)
 		bookgen.Create(*dbsession, site[0], site[1], mfile)
 
@@ -198,7 +198,7 @@ func Run(dbsession *mgo.Session) {
 
 			buf.Reset()
 
-			if markfileSize > int64(2000000) {
+			if markfileSize > int64(3000000) {
 				log.Println("Time delete markfile")
 				err = os.Remove(mfile)
 				if err != nil {

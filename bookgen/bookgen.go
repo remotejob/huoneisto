@@ -4,9 +4,10 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 
-	"github.com/remotejob/kaukotyoeu_utils/dbhandler"
+	"github.com/remotejob/kaukotyoeu/dbhandler"
 	"github.com/shogo82148/go-shuffle"
 	"gopkg.in/mgo.v2"
 )
@@ -16,8 +17,8 @@ func Create(session mgo.Session, themes string, locale string, filename string) 
 
 	log.Println("Start Create file", filename, themes, locale)
 
-	// articles := dbhandler.GetAllUseful(session, strings.TrimSpace(themes), strings.TrimSpace(locale))
-	articles := dbhandler.GetAllUseful(session, "realestate", "fi_FI")
+	articles := dbhandler.GetAllUseful(session, strings.TrimSpace(themes), strings.TrimSpace(locale))
+	// articles := dbhandler.GetAllUseful(session, "realestate", "fi_FI")
 
 	log.Println("GET keywords", len(articles))
 
