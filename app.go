@@ -24,6 +24,7 @@ var dbadmin string
 var username string
 var password string
 var mechanism string
+var maxfilesize int
 
 // var sites []string
 var mongoDBDialInfo mgo.DialInfo
@@ -41,7 +42,7 @@ func init() {
 	username = os.Getenv("USERNAME")
 	password = os.Getenv("PASSWORD")
 	mechanism = os.Getenv("MECHANISM")
-	// sites = []string{os.Getenv("SITES")}
+	maxfilesize, _ = strconv.Atoi(os.Getenv("MAXFILESIZE"))
 
 	tick, _ = strconv.Atoi(os.Getenv("TICK"))
 
@@ -126,14 +127,7 @@ func main() {
 
 //Run runner for utils
 func Run(dbsession *mgo.Session) {
-	// log.Println(themes)
-	// log.Println(locale)
-	// log.Println(addrs[0])
-	// log.Println("dbadmin", dbadmin)
-	// log.Println(username)
-	// log.Println(password)
-	// log.Println(sites[0])
-	// log.Println("tick", tick)
+
 	var markfileSize int64
 
 	for _, site := range sites {
@@ -147,7 +141,7 @@ func Run(dbsession *mgo.Session) {
 
 		mfile := "/" + site[0] + "_" + site[1] + ".txt"
 		// mfile := "/blog.txt"
-		log.Println(mfile)
+		// log.Println(mfile)
 		bookgen.Create(*dbsession, site[0], site[1], mfile)
 
 		buf := bytes.NewBuffer(nil)
@@ -205,8 +199,8 @@ func Run(dbsession *mgo.Session) {
 
 			buf.Reset()
 
-			if markfileSize > int64(3000000) {
-				log.Println("Time delete markfile")
+			if markfileSize > int64(maxfilesize) {
+				log.Println("Time delete markfile max permited", maxfilesize)
 				err = os.Remove(mfile)
 				if err != nil {
 					log.Fatal(err)

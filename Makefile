@@ -1,7 +1,7 @@
 all: push
 
 # 0.0 shouldn't clobber any released builds
-TAG =1.28cron
+TAG =1.29cron
 PREFIX = remotejob/huoneisto_utils
 
 binary: app.go
@@ -14,8 +14,9 @@ push: container
 	docker push $(PREFIX):$(TAG)
 
 set: 
-	#  ssh root@159.203.107.223 kubectl set image deployment/huoneisto_utils huoneisto_utils=$(PREFIX):$(TAG)
-	 ssh root@159.203.107.223 kubectl rolling-update huoneisto_utils --image=$(PREFIX):$(TAG)
+	# ssh root@159.203.107.223 kubectl set image deployment/huoneisto_utils huoneisto_utils=huoneisto_utils:$(TAG) -n huoneisto
+	ssh root@159.203.107.223 kubectl set image deployment/huoneisto-utils huoneisto-utils=$(PREFIX):$(TAG) -n huoneisto
+	
 
 clean:
 	docker rmi -f $(PREFIX):$(TAG) || true

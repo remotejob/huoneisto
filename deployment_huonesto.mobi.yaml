@@ -16,7 +16,9 @@ spec:
         - name: DBADMIN
           value: admin
         - name: ADDRS
-          value: digimongo-service              
+          value: digimongo-service
+        - name: MAXFILESIZE
+          value: 6000000                
         - name: USERNAME
           valueFrom:
             secretKeyRef:
