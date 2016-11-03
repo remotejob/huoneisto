@@ -16,6 +16,8 @@ func Create(session mgo.Session, themes string, locale string, filename string) 
 
 	articles := dbhandler.GetAllUseful(session, themes, locale)
 
+	log.Println("GET keywords", len(articles))
+
 	var numberstoshuffle []int
 
 	for num := range articles {

@@ -200,7 +200,7 @@ func Run(dbsession *mgo.Session) {
 
 			if markfileSize > int64(2000000) {
 				log.Println("Time delete markfile")
-				err = os.Remove("mfile")
+				err = os.Remove(mfile)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -209,7 +209,7 @@ func Run(dbsession *mgo.Session) {
 			log.Println("END close DB")
 		} else {
 
-			log.Panicln("VERY SMALL FILE ???")
+			log.Fatalln("VERY SMALL FILE ???")
 
 		}
 
