@@ -78,7 +78,7 @@ func (article *Entryarticle) AddContents(sentenses []string) {
 
 func (article *Entryarticle) InsertIntoDB(session mgo.Session) {
 
-	backtime := gen.Random(0, 50000000)
+	backtime := gen.Random(0, 5000000)
 
 	now := time.Now()
 

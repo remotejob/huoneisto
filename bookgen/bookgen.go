@@ -14,6 +14,8 @@ import (
 //Create create file
 func Create(session mgo.Session, themes string, locale string, filename string) {
 
+	log.Println("Start Create file", filename)
+
 	articles := dbhandler.GetAllUseful(session, themes, locale)
 
 	log.Println("GET keywords", len(articles))
@@ -35,7 +37,7 @@ func Create(session mgo.Session, themes string, locale string, filename string) 
 		log.Println(err.Error())
 	}
 
-	defer f.Close()
+	// defer f.Close()
 
 	for _, i := range numberstoshuffle {
 
