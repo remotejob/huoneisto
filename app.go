@@ -28,7 +28,8 @@ var maxfilesize int
 
 // var sites []string
 var mongoDBDialInfo mgo.DialInfo
-var dbsession *mgo.Session
+
+// var dbsession *mgo.Session
 
 var tick int
 var sites [][]string
@@ -85,23 +86,21 @@ func main() {
 
 	// <-gocron.Start()
 
-	dbsession, err := mgo.DialWithInfo(&mongoDBDialInfo)
-
-	if err != nil {
-
-		log.Println(err.Error())
-	}
-	defer dbsession.Close()
-
-	// c := cron.New()
-	// c.AddFunc("0 * * * * *", Run)
-
 	// go c.Start()
 	// sig := make(chan os.Signal)
 	// signal.Notify(sig, os.Interrupt, os.Kill)
 	// <-sig
 
 	for {
+		dbsession, err := mgo.DialWithInfo(&mongoDBDialInfo)
+
+		if err != nil {
+
+			log.Println(err.Error())
+		} else {
+
+		}
+		// defer dbsession.Close()
 		pauseint := rand.Perm(tick)[0]
 		log.Println("sleeppause", pauseint)
 
@@ -109,6 +108,7 @@ func main() {
 
 		log.Println("end pause startdb", pauseint+tick)
 		Run(dbsession)
+		dbsession.Close()
 	}
 
 	// go func() {

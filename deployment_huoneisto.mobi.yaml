@@ -1,28 +1,24 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: huoneisto-utils-espoo
+  name: huoneisto-utils
   namespace: huoneisto
 spec:
   template:
     metadata:
       labels:
-        run: huoneisto-utils-espoo
+        run: huoneisto-utils
     spec:
       containers:
-      - name: huoneisto-utils-espoo
-        image: remotejob/huoneisto_utils:1.16cron
+      - name: huoneisto-utils
+        image: remotejob/huoneisto_utils:1.29cron
         env:
-        - name: THEMES
-          value: realestate
-        - name: LOCALE
-          value: fi_FI
         - name: DBADMIN
           value: admin
         - name: ADDRS
           value: digimongo-service
-        - name: SITES
-          value: espoo.huoneisto.mobi               
+        - name: MAXFILESIZE
+          value: "8000000"                
         - name: USERNAME
           valueFrom:
             secretKeyRef:
