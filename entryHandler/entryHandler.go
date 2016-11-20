@@ -1,3 +1,7 @@
+/*
+used to keep new record slice of struc in pointer
+
+*/
 package entryHandler
 
 import (
